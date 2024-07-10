@@ -5,7 +5,12 @@ export default {
     extend: {},
   },
   theme: {
-    extend: {},
+    extend: {
+      colors:{
+        primary:'#2B85FF',
+        secondary:'#EF863E',
+      },
+    },
   },
   plugins: [],
 }
