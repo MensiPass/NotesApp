@@ -36,13 +36,7 @@ const Login = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
-            <PasswordInput
-              value={password}
-              onChange={(e: {
-                target: { value: React.SetStateAction<string> };
-              }) => setPassword(e.target.value)}
-              placeholder=""
-            ></PasswordInput>
+            <PasswordInput value={password}></PasswordInput>
             {error && <p className="text-red-500 text-xs pb-1">{error}</p>}
             <button type="submit" className="btn-primary">
               Login
