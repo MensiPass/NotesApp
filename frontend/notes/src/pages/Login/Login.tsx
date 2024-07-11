@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Navbar from "../../components/Navbar/Navbar";
 import PasswordInput from "../../components/Input/PasswordInput";
 import { Link } from "react-router-dom";
-import { validateEmail } from "../../utils/helper";
+import { validateEmail } from "./../../utils/helper";
 
 const Login = () => {
   const [email, setEmail] = useState("");
