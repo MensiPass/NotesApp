@@ -5,7 +5,8 @@ interface Props {
   setTags: (item: string[]) => void;
 }
 
-const TagInput = ({ tags, setTags }: Props) => {
+const TagInput = () => {
+  const [tags, setTags] = useState(["Tag1", "Tag2"]);
   const [inputValue, setInputValue] = useState("");
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
@@ -13,7 +14,9 @@ const TagInput = ({ tags, setTags }: Props) => {
   const addNewTag = () => {
     if (inputValue.trim() !== "") {
       const newTags = [...tags, inputValue.trim()];
+      console.log(tags);
       setTags(newTags);
+      console.log(newTags);
       setInputValue("");
     }
   };

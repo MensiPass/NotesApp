@@ -4,7 +4,6 @@ import TagInput from "../../components/Input/TagInput";
 const AddEditNotes = () => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [tags, setTags] = useState(["Tag1", "Tag2"]);
 
   return (
     <div>
@@ -30,7 +29,7 @@ const AddEditNotes = () => {
       </div>
       <div className="mt-3">
         <label className="input-label">Tags</label>
-        <TagInput tags={tags} setTags={() => setTags} />
+        <TagInput />
       </div>
       <button className="btn-primary font-medium mt-5 p-3" onClick={() => {}}>
         Add
