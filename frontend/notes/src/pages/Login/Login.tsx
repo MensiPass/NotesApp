@@ -1,13 +1,15 @@
 import React, { useState } from "react";
 import Navbar from "../../components/Navbar/Navbar";
 import PasswordInput from "../../components/Input/PasswordInput";
-import { Link } from "react-router-dom";
-import { validateEmail } from "./../../utils/helper";
+import { Link, useNavigate } from "react-router-dom";
+import { validateEmail } from "../../utils/helper";
+import { axiosInstance } from "../../utils/axiosInstance";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   const handleLogin = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
@@ -21,11 +23,34 @@ const Login = () => {
     }
     setError("");
     //login api call
+    try {
+      const response = await axiosInstance.post("/login", {
+        email: email,
+        password: password,
+      });
+
+      //hndle successfullogin
+      if (response.data && response.data.accessToken) {
+        localStorage.setItem("token", response.data.accessToken);
+        navigate("/dashboard");
+      }
+    } catch (error: any) {
+      //handle login error
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
+        setError(error.response.data.message);
+      } else {
+        setError("An unexpected error occured. Please try again.");
+      }
+    }
   };
   return (
     <>
       <Navbar></Navbar>
-      <div className="flex items-center justify-center mt-">
+      <div className="flex items-center justify-center mt-10">
         <div className="w-96 border rounded bg-white px-7 py-10">
           <form onSubmit={handleLogin}>
             <h4 className="text-2xl mb-7">Login</h4>
