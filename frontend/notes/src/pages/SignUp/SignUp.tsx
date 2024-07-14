@@ -1,13 +1,16 @@
 import React, { useState } from "react";
 import Navbar from "../../components/Navbar/Navbar";
 import PasswordInput from "../../components/Input/PasswordInput";
-import { Link } from "react-router-dom";
-import { validateEmail } from "./../../utils/helper";
+import { Link, useNavigate } from "react-router-dom";
+import { validateEmail, axiosInstance } from "./../../utils/helper";
+
 const SignUp = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [userInfo, setUserInfo] = useState("");
+  const navigate = useNavigate();
 
   const handleSignUp = async (e: { preventDefault: () => void }) => {
     if (!name) {
@@ -25,10 +28,51 @@ const SignUp = () => {
     setError("");
 
     //signup api call
+    try {
+      const response = await axiosInstance.post("/create-account", {
+        fullName: name,
+        email: email,
+        password: password,
+      });
+
+      //hndle successful signup
+      if (response.data && response.data.accessToken) {
+        setError(response.data.message);
+        return;
+      }
+      if (response.data && response.data.accessToken) {
+        localStorage.setItem("token", response.data.accessToken);
+        navigate("dashboard");
+      }
+    } catch (error: any) {
+      //handle signup error
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
+        setError(error.response.data.message);
+      } else {
+        setError("An unexpected error occured. Please try again.");
+      }
+    }
+  };
+  const getUserInfo = async () => {
+    try {
+      const response = await axiosInstance.get("/get-user");
+      if (response.data && response.data.user) {
+        setUserInfo(response.data.user.fullName);
+      }
+    } catch (error: any) {
+      if (error.response.status == 401) {
+        localStorage.clear();
+        navigate("/login");
+      }
+    }
   };
   return (
     <>
-      <Navbar></Navbar>
+      <Navbar userInfo={userInfo}></Navbar>
       <div className="flex items-center justify-center mt-">
         <div className="w-96 border rounded bg-white px-7 py-10">
           <form onSubmit={handleSignUp}>

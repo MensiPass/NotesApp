@@ -2,15 +2,14 @@ import React, { useState } from "react";
 import Navbar from "../../components/Navbar/Navbar";
 import PasswordInput from "../../components/Input/PasswordInput";
 import { Link, useNavigate } from "react-router-dom";
-import { validateEmail } from "../../utils/helper";
-import { axiosInstance } from "../../utils/axiosInstance";
+import { validateEmail, axiosInstance } from "./../../utils/helper";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
-
+  const [userInfo, setUserInfo] = useState("");
   const handleLogin = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
     if (!validateEmail(email)) {
@@ -47,9 +46,23 @@ const Login = () => {
       }
     }
   };
+
+  const getUserInfo = async () => {
+    try {
+      const response = await axiosInstance.get("/get-user");
+      if (response.data && response.data.user) {
+        setUserInfo(response.data.user.fullName);
+      }
+    } catch (error: any) {
+      if (error.response.status == 401) {
+        localStorage.clear();
+        navigate("/login");
+      }
+    }
+  };
   return (
     <>
-      <Navbar></Navbar>
+      <Navbar userInfo={userInfo}></Navbar>
       <div className="flex items-center justify-center mt-10">
         <div className="w-96 border rounded bg-white px-7 py-10">
           <form onSubmit={handleLogin}>
