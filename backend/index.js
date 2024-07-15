@@ -137,7 +137,7 @@ catch (error){
 });
 
 //edit note
-app.put ("/edit-note/:noteId",authenticationToken, async (req,res)=>{
+app.put ("/edit-note/:noteId",authenticateToken, async (req,res)=>{
     const noteId=req.params.noteId;
     const{title,content,tags, isPinned}=req.body;
     const {user}=req.user;
