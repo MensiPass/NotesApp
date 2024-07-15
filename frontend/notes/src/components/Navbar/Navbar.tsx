@@ -4,8 +4,10 @@ import { useNavigate } from "react-router-dom";
 import SearchBar from "../SearchBar/SearchBar";
 interface Props {
   userInfo: string;
+  onSearchNote: (item: string) => {};
+  handleClearSearch: () => void;
 }
-const Navbar = ({ userInfo }: Props) => {
+const Navbar = ({ userInfo, onSearchNote, handleClearSearch }: Props) => {
   const [searchQuery, setSearchQuery] = useState("");
 
   const navigate = useNavigate();
@@ -13,9 +15,14 @@ const Navbar = ({ userInfo }: Props) => {
     localStorage.clear();
     navigate("/login");
   };
-  const handleSearch = () => {};
+  const handleSearch = () => {
+    if (searchQuery) {
+      onSearchNote(searchQuery);
+    }
+  };
   const onClearSearch = () => {
     setSearchQuery("");
+    handleClearSearch();
   };
   return (
     <div className="bg-white flex items-center justify-between px-6 py-2 drop-shadow">
