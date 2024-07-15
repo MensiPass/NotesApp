@@ -7,8 +7,15 @@ interface Props {
   type: any;
   onClose: () => void;
   getAllNotes: () => void;
+  showToastMessage: (item: string) => void;
 }
-const AddEditNotes = ({ noteData, type, getAllNotes, onClose }: Props) => {
+const AddEditNotes = ({
+  noteData,
+  type,
+  getAllNotes,
+  showToastMessage,
+  onClose,
+}: Props) => {
   const [title, setTitle] = useState(noteData?.title || "");
   const [content, setContent] = useState(noteData?.content || "");
   const [tags, setTags] = useState(noteData?.tags || ["Tag1", "Tag2"]);
@@ -23,6 +30,7 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }: Props) => {
         tags,
       });
       if (response.data && response.data.note) {
+        showToastMessage("Note Added Successfuly.");
         getAllNotes();
         onClose();
       }
@@ -47,6 +55,7 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }: Props) => {
         tags,
       });
       if (response.data && response.data.note) {
+        showToastMessage("Note Updated Successfuly.");
         getAllNotes();
         onClose();
       }
